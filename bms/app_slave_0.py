@@ -85,7 +85,7 @@ tk.Label(master, text="[NAS-ABNORMAL, NAS-AUTO-ACT, NAS-AUTO-RDY] (Default: 001)
 
 
 # Signal 5
-tk.Label(master, text="Signal 5 (RESP: NAS -> BMS):", anchor="w").grid(row=4, column=0)
+tk.Label(master, text="Signal 5 (RESP: NAS -> BMS) 10XRPM:", anchor="w").grid(row=4, column=0)
 e5 = tk.Entry(master, width=entry_width)
 e5.grid(row=4, column=1, padx=20, pady=5)
 
@@ -99,7 +99,10 @@ e5.grid(row=4, column=1, padx=20, pady=5)
 
 
 # Server = Slave
-server = ModbusServer("192.168.0.200", port=502, no_block=True)
+# server = ModbusServer("192.168.0.200", port=502, no_block=True)
+
+# Kongsberg setting
+server = ModbusServer("172.17.17.110", port=502, no_block=True)
 
 # Cliet = Master is "192.168.0.99" (Test Condition)
 
@@ -141,7 +144,10 @@ def stop_slave_server():
 # - pyModbusTCP automatically sends response to the master
 def get_bms_status():
     # Address = 00, Bits: 2bits
-    bms_status = server.data_bank.get_coils(0, 2)
+    # bms_status = server.data_bank.get_coils(0, 2)
+
+    # Address = 100(DEC), Bits: 2bits
+    bms_status = server.data_bank.get_coils(100, 2)
 
     # Display to the GUI
     o1.insert(tk.INSERT,"BMS_AUTO_MODE_RDY:" + str(bms_status[0]) + " / BMS_AUTO_MODE_ACT:" + str(bms_status[1]))
@@ -215,6 +221,25 @@ def _to_int(val, nbits):
         i -= 2 ** nbits
     return i
 #----------------------------------------------------------------------------------------------------
+
+
+# ---------------------------------------------------------------------------------------------------
+# - Bits, HEX Manipulation, Utils
+# - For Nabtesco BMS
+def to_hex2(val, nbits):
+  return hex((val + (1 << nbits)) % (1 << nbits)).lstrip('0x')
+
+def hex2complement2(number):
+    hexadecimal_result = format(number, "03X")
+    return hexadecimal_result.zfill(4) # .zfill(n) adds leading 0's if the integer has less digits than n
+
+def _to_int2(val, nbits):
+    i = int(val, 16)
+    if i >= 2 ** (nbits - 1):
+        i -= 2 ** nbits
+    return i
+#-----------------------------------
+
 
 
 
