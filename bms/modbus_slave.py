@@ -5,8 +5,8 @@ from pyModbusTCP import utils
 
 # Create an instance of ModbusServer
 #- if port=502, this code should be run as superuser
-# server = ModbusServer("localhost", port=502, no_block=True)
-server = ModbusServer("192.168.0.200", port=502, no_block=True)
+server = ModbusServer("localhost", port=502, no_block=True)
+# server = ModbusServer("192.168.0.200", port=502, no_block=True)
 
 
 

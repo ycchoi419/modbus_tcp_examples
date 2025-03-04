@@ -102,7 +102,8 @@ e5.grid(row=4, column=1, padx=20, pady=5)
 # server = ModbusServer("192.168.0.200", port=502, no_block=True)
 
 # Kongsberg setting
-server = ModbusServer("172.17.17.110", port=502, no_block=True)
+# server = ModbusServer("172.17.17.110", port=502, no_block=True)
+server = ModbusServer("127.0.0.1", port=502, no_block=True)
 
 # Cliet = Master is "192.168.0.99" (Test Condition)
 
